@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("../public/ClashDisplay.otf");
+}
+
+@font-face {
+  font-family: "ClashDisplayBold";
+  src: url("../public/ClashDisplay-Bold.otf");
+}
