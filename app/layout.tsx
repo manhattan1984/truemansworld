@@ -10,7 +10,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body>{children}</body>
+      <body className="font-clash text-xl">{children}</body>
     </html>
   );
 }
