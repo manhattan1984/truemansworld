@@ -1,3 +1,4 @@
+"use client";
 import * as THREE from "three";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
@@ -6,38 +7,10 @@ import { TextureLoader } from "three";
 import { Effects as EffectsComposer } from "@react-three/drei";
 import { extend, useThree } from "@react-three/fiber";
 import { UnrealBloomPass } from "three-stdlib";
+import planets from "../constants/planets";
+import { Planet } from "./Planet";
 
 extend({ UnrealBloomPass });
-
-function Planet({ position, args, texture, speed }) {
-  const meshRef = useRef(null);
-  const groupRef = useRef(null);
-
-  useFrame(() => {
-    if (!meshRef.current) {
-      return;
-    }
-    meshRef.current.rotation.y += 0.01 * speed;
-    groupRef.current.rotation.z += 0.01 * speed;
-  });
-
-  const textureMap = useLoader(TextureLoader, texture);
-
-  return (
-    <group ref={groupRef} position={[0, 0, 0]}>
-      <mesh
-        ref={meshRef}
-        position={position}
-        onClick={() => {
-          console.log(`I am ${texture}`);
-        }}
-      >
-        <sphereGeometry args={args} />
-        <meshLambertMaterial map={textureMap} />
-      </mesh>
-    </group>
-  );
-}
 
 export const Effects = () => {
   const { size, scene, camera } = useThree();
@@ -90,27 +63,6 @@ function Sun() {
     </>
   );
 }
-
-const planets = [
-  {
-    texture: "mercury.png",
-    args: [0.15],
-    position: [1, 2, 0],
-    speed: 1,
-  },
-  {
-    texture: "venus.jpeg",
-    args: [0.2],
-    position: [1, 4, 0],
-    speed: -0.5,
-  },
-  {
-    texture: "earth.jpeg",
-    args: [0.3],
-    position: [1, 6, 0],
-    speed: 0.4,
-  },
-];
 
 export default function SolarSystem() {
   return (

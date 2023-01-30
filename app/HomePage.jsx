@@ -12,7 +12,7 @@ export default function HomePage() {
         </p>
         <p>Each planet is a project I have worked on</p>
         <p>And I am the sun, the center of this world</p>
-        <div className="text-gray-300 text-lg">
+        <div className="text-gray-300 text-lg mix-blend-difference">
           <p>Pinch or Scroll To Zoom In</p>
           <p>Drag the screen to navigate this world</p>
           <p>Select A Planet To Explore</p>
@@ -20,7 +20,9 @@ export default function HomePage() {
       </div>
       <Suspense
         fallback={
-          <p className="text-black text-3xl">Loading The True Man's World</p>
+          <p className="text-black text-3xl mix-blend-difference">
+            Loading The True Man's World
+          </p>
         }
       >
         <SolarSystem />
