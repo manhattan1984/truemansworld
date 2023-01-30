@@ -50,11 +50,10 @@ function Sun() {
           console.log("I am the sun");
         }}
       >
-        <pointLight color={"yellow"} position={[0, 0, 0]} intensity={1.2} />
         <sphereGeometry args={[1]} />
         <meshStandardMaterial
           toneMapped={false}
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.1}
           emissive={"yellow"}
           map={sunMap}
         />
@@ -74,7 +73,7 @@ export default function SolarSystem() {
         position: [0, 0, 10],
       }}
     >
-      <ambientLight intensity={0.1} />
+      <ambientLight intensity={1} />
       <Sun />
 
       {planets.map((planet, index) => (
