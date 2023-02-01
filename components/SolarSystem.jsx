@@ -1,14 +1,18 @@
 "use client";
 import * as THREE from "three";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { OrbitControls, Stars, Text3D, useProgress } from "@react-three/drei";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { Suspense, useMemo, useRef, useState } from "react";
 import { TextureLoader } from "three";
 import { Effects as EffectsComposer } from "@react-three/drei";
 import { extend, useThree } from "@react-three/fiber";
 import { UnrealBloomPass } from "three-stdlib";
 import planets from "../constants/planets";
 import { Planet } from "./Planet";
+import { animated, config, useSpring } from "@react-spring/three";
+import { useRouter } from "next/navigation";
+import Loader from "./Loader";
+import helvetika from "three/examples/fonts/helvetiker_bold.typeface.json";
 
 extend({ UnrealBloomPass });
 
@@ -32,9 +36,16 @@ export const Effects = () => {
   );
 };
 
-function Sun() {
+export function Sun() {
   const sunMap = useLoader(TextureLoader, "sun.jpeg");
   const meshRef = useRef(null);
+  const [active, setActive] = useState(false);
+  const router = useRouter();
+
+  const { scale } = useSpring({
+    scale: active ? 10 : 1,
+    config: config.molasses,
+  });
 
   useFrame(() => {
     if (!meshRef.current) {
@@ -44,9 +55,12 @@ function Sun() {
 
   return (
     <>
-      <mesh
+      <animated.mesh
+        scale={scale}
         ref={meshRef}
         onClick={() => {
+          setActive(!active);
+          router.push("/sun");
           console.log("I am the sun");
         }}
       >
@@ -57,30 +71,41 @@ function Sun() {
           emissive={"yellow"}
           map={sunMap}
         />
-      </mesh>
+      </animated.mesh>
       <Effects />
     </>
   );
 }
 
 export default function SolarSystem() {
+  const { progress } = useProgress();
   return (
-    <Canvas
-      camera={{
-        fov: 75,
-        near: 0.1,
-        far: 1000,
-        position: [0, 0, 10],
-      }}
-    >
-      <ambientLight intensity={1} />
-      <Sun />
+    <>
+      <Canvas
+        camera={{
+          fov: 75,
+          near: 0.1,
+          far: 1000,
+          position: [0, 0, 10],
+        }}
+      >
+        <Suspense
+          fallback={
+            <Text3D scale={[0.5, 0.5, 0.5]} font={helvetika}>
+              Loading {progress}
+            </Text3D>
+          }
+        >
+          <ambientLight intensity={1} />
+          <Sun />
 
-      {planets.map((planet, index) => (
-        <Planet {...planet} key={index} />
-      ))}
-      <OrbitControls />
-      <Stars />
-    </Canvas>
+          {planets.map((planet, index) => (
+            <Planet {...planet} key={index} />
+          ))}
+          <OrbitControls />
+          <Stars />
+        </Suspense>
+      </Canvas>
+    </>
   );
 }

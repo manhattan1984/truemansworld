@@ -1,4 +1,5 @@
 "use client";
+import { Html, useProgress } from "@react-three/drei";
 import { Suspense } from "react";
 import SolarSystem from "../components/SolarSystem";
 
@@ -18,13 +19,7 @@ export default function HomePage() {
           <p>Select A Planet To Explore</p>
         </div>
       </div>
-      <Suspense
-        fallback={
-          <p className="text-black text-3xl mix-blend-difference">
-            Loading The True Man's World
-          </p>
-        }
-      >
+      <Suspense>
         <SolarSystem />
       </Suspense>
     </div>

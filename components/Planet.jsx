@@ -1,14 +1,21 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { TextureLoader } from "three";
 import { Center, Text3D } from "@react-three/drei";
 import helvetika from "three/examples/fonts/helvetiker_bold.typeface.json";
+import { useSpring, animated, config } from "@react-spring/three";
 
 export const Planet = ({ position, args, texture, speed, slug, name }) => {
   const meshRef = useRef(null);
   const groupRef = useRef(null);
   const router = useRouter();
+
+  const [active, setActive] = useState(false);
+  const { scale } = useSpring({
+    scale: active ? 10 : 1,
+    config: config.molasses,
+  });
 
   useFrame(() => {
     if (!meshRef.current) {
@@ -22,10 +29,12 @@ export const Planet = ({ position, args, texture, speed, slug, name }) => {
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      <mesh
+      <animated.mesh
         ref={meshRef}
+        scale={scale}
         position={position}
         onClick={() => {
+          setActive(!active);
           console.log(`I am ${texture}`);
           router.push(slug ? `planets/${slug}` : "");
         }}
@@ -37,7 +46,7 @@ export const Planet = ({ position, args, texture, speed, slug, name }) => {
             {name}
           </Text3D>
         </Center>
-      </mesh>
+      </animated.mesh>
       {/* <Text text={name} position={position} /> */}
     </group>
   );
